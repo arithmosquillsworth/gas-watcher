@@ -78,7 +78,7 @@ fn format_price(wei: u128, as_wei: bool) -> String {
 
 fn main() {
     let args = Args::parse();
-    
+
     println!("🔮 Gas Watcher v0.1.0");
     println!("RPC: {}\n", args.rpc);
 
@@ -104,7 +104,10 @@ fn main() {
                 // Alert if threshold exceeded
                 if let Some(threshold) = args.alert {
                     if gwei > threshold {
-                        println!("⚠️  ALERT: Gas price ({:.2} gwei) exceeds threshold ({:.2} gwei)!", gwei, threshold);
+                        println!(
+                            "⚠️  ALERT: Gas price ({:.2} gwei) exceeds threshold ({:.2} gwei)!",
+                            gwei, threshold
+                        );
                     }
                 }
             }
