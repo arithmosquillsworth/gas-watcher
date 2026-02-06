@@ -3,8 +3,12 @@ name = "gas-watcher"
 version = "0.2.0"
 edition = "2024"
 authors = ["Arithmos Quillsworth <arithmos.quillsworth@gmail.com>"]
-description = "Ethereum and Base L2 gas price monitor"
+description = "Ethereum and Base L2 gas price monitor with watch mode and alerts"
 repository = "https://github.com/arithmosquillsworth/gas-watcher"
+license = "MIT"
+keywords = ["ethereum", "gas", "base", "cli", "monitor"]
+categories = ["command-line-utilities", "cryptocurrency"]
+rust-version = "1.85"
 
 [[bin]]
 name = "gas-watcher"
