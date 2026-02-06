@@ -9,6 +9,7 @@ Simple Ethereum gas price monitor written in Rust.
 - Alert thresholds
 - Color-coded output (🟢 low, 🟡 normal, 🟠 high, 🔴 very high)
 - Configurable RPC endpoint
+- Base L2 support
 
 ## Installation
 
@@ -26,8 +27,11 @@ cargo build --release
 ## Usage
 
 ```bash
-# Single check
+# Single check (Ethereum mainnet)
 gas-watcher
+
+# Check Base L2 gas prices
+gas-watcher --base
 
 # Watch mode (check every 10 seconds)
 gas-watcher --watch 10
@@ -46,6 +50,7 @@ gas-watcher --wei
 
 ```
 🔮 Gas Watcher v0.1.0
+Network: Ethereum
 RPC: https://eth.drpc.org
 
 🟢 Gas Price: 0.31 gwei

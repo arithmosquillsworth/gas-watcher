@@ -10,6 +10,10 @@ struct Args {
     #[arg(short, long, default_value = "https://eth.drpc.org")]
     rpc: String,
 
+    /// Use Base L2 instead of mainnet
+    #[arg(long)]
+    base: bool,
+
     /// Watch mode - poll every N seconds
     #[arg(short, long)]
     watch: Option<u64>,
@@ -79,11 +83,21 @@ fn format_price(wei: u128, as_wei: bool) -> String {
 fn main() {
     let args = Args::parse();
 
+    // Use Base RPC if --base flag is set
+    let rpc_url = if args.base {
+        "https://mainnet.base.org".to_string()
+    } else {
+        args.rpc
+    };
+
+    let network_name = if args.base { "Base" } else { "Ethereum" };
+
     println!("🔮 Gas Watcher v0.1.0");
-    println!("RPC: {}\n", args.rpc);
+    println!("Network: {}" , network_name);
+    println!("RPC: {}\n", rpc_url);
 
     loop {
-        match get_gas_price(&args.rpc) {
+        match get_gas_price(&rpc_url) {
             Ok(price) => {
                 let formatted = format_price(price, args.wei);
                 let gwei = wei_to_gwei(price);
