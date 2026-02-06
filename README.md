@@ -49,7 +49,7 @@ gas-watcher --wei
 ## Output
 
 ```
-🔮 Gas Watcher v0.1.0
+🔮 Gas Watcher v0.2.0
 Network: Ethereum
 RPC: https://eth.drpc.org
 

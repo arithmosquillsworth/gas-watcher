@@ -92,7 +92,7 @@ fn main() {
 
     let network_name = if args.base { "Base" } else { "Ethereum" };
 
-    println!("🔮 Gas Watcher v0.1.0");
+    println!("🔮 Gas Watcher v0.2.0");
     println!("Network: {}" , network_name);
     println!("RPC: {}\n", rpc_url);
 

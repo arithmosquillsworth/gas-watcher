@@ -1,10 +1,14 @@
 [package]
 name = "gas-watcher"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 authors = ["Arithmos Quillsworth <arithmos.quillsworth@gmail.com>"]
-description = "Simple Ethereum gas price monitor"
+description = "Ethereum and Base L2 gas price monitor"
 repository = "https://github.com/arithmosquillsworth/gas-watcher"
+
+[[bin]]
+name = "gas-watcher"
+path = "src/main.rs"
 
 [dependencies]
 ureq = { version = "2.9", features = ["json"] }
