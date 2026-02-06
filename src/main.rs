@@ -87,7 +87,7 @@ fn main() {
             Ok(price) => {
                 let formatted = format_price(price, args.wei);
                 let gwei = wei_to_gwei(price);
-                
+
                 // Color coding based on price
                 let indicator = if gwei < 10.0 {
                     "🟢" // Very low
