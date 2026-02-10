@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -29,6 +30,10 @@ type RPCResponse struct {
 	JSONRPC string `json:"jsonrpc"`
 	ID      int    `json:"id"`
 	Result  string `json:"result"`
+}
+
+type DiscordWebhook struct {
+	Content string `json:"content"`
 }
 
 func getGasPrice() (float64, error) {
@@ -109,6 +114,39 @@ func logGasPrice(gwei float64, status string) error {
 	return err
 }
 
+func sendDiscordAlert(gwei float64, status string) error {
+	webhookURL := os.Getenv("DISCORD_WEBHOOK_URL")
+	if webhookURL == "" {
+		return nil // Skip if no webhook configured
+	}
+
+	var message string
+	if gwei > highThreshold {
+		message = fmt.Sprintf("⛽ **High Gas Alert**\nCurrent: %.2f gwei\nStatus: %s\nConsider waiting before transacting.", gwei, status)
+	} else if gwei < lowThreshold {
+		message = fmt.Sprintf("✅ **Low Gas Opportunity**\nCurrent: %.2f gwei\nGood time to transact!", gwei)
+	} else {
+		return nil // No alert needed for medium
+	}
+
+	payload := DiscordWebhook{Content: message}
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(webhookURL, "application/json", bytes.NewReader(jsonData))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 204 {
+		return fmt.Errorf("discord webhook returned %d", resp.StatusCode)
+	}
+	return nil
+}
+
 func main() {
 	reset := "\033[0m"
 	
@@ -149,6 +187,11 @@ func main() {
 	// Log to file
 	if err := logGasPrice(gwei, status); err != nil {
 		fmt.Printf("Warning: Failed to log: %v\n", err)
+	}
+
+	// Send Discord alert if configured
+	if err := sendDiscordAlert(gwei, status); err != nil {
+		fmt.Printf("Warning: Discord alert failed: %v\n", err)
 	}
 
 	fmt.Println("\nLog saved to: ~/.openclaw/workspace/logs/gas-price.log")
