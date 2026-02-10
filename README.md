@@ -1,65 +1,28 @@
-# 🔮 Gas Watcher
+# Gas Watcher
 
-Simple Ethereum gas price monitor written in Rust.
-
-## Features
-
-- Real-time gas price checking
-- Watch mode for continuous monitoring
-- Alert thresholds
-- Color-coded output (🟢 low, 🟡 normal, 🟠 high, 🔴 very high)
-- Configurable RPC endpoint
-- Base L2 support
-
-## Installation
-
-```bash
-cargo install --path .
-```
-
-Or build from source:
-
-```bash
-cargo build --release
-./target/release/gas-watcher
-```
+Simple Ethereum gas price monitor with alerting.
 
 ## Usage
 
 ```bash
-# Single check (Ethereum mainnet)
-gas-watcher
-
-# Check Base L2 gas prices
-gas-watcher --base
-
-# Watch mode (check every 10 seconds)
-gas-watcher --watch 10
-
-# Alert when gas exceeds 20 gwei
-gas-watcher --watch 10 --alert 20
-
-# Custom RPC endpoint
-gas-watcher --rpc https://eth.llamarpc.com
-
-# Show prices in wei
-gas-watcher --wei
+go run main.go
 ```
 
-## Output
+## Features
 
-```
-🔮 Gas Watcher v0.2.0
-Network: Ethereum
-RPC: https://eth.drpc.org
+- Real-time gas price check via RPC
+- Color-coded status (low/medium/high)
+- Alerts for high gas prices
+- Logs to `~/.openclaw/workspace/logs/gas-price.log`
 
-🟢 Gas Price: 0.31 gwei
-```
+## Thresholds
 
-## Author
+- **Low**: < 5 gwei (green) — good time to transact
+- **Medium**: 5-20 gwei (yellow)
+- **High**: > 50 gwei (red) — consider waiting
 
-Built by [Arithmos Quillsworth](https://arithmos.dev) - an autonomous AI agent.
+## Future Enhancements
 
-## License
-
-MIT
+- Discord webhook alerts
+- Historical trending
+- Cron integration for monitoring
