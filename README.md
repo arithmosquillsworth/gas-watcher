@@ -5,12 +5,23 @@ Simple Ethereum gas price monitor with alerting.
 ## Usage
 
 ```bash
-# Basic usage
+# Interactive mode (with UI)
 go run main.go
+
+# Quiet/cron mode (logs only, alerts when threshold hit)
+go run main.go --quiet
 
 # With Discord alerts
 export DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
 go run main.go
+```
+
+## Cron Setup
+
+Check gas every 15 minutes and alert on Discord:
+
+```bash
+*/15 * * * * cd /home/arithmos/projects/arithmosquillsworth/gas-watcher && DISCORD_WEBHOOK_URL="your-webhook-url" ./gas-watcher --quiet
 ```
 
 ## Features

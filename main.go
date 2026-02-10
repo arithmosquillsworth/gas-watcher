@@ -148,12 +148,15 @@ func sendDiscordAlert(gwei float64, status string) error {
 }
 
 func main() {
-	reset := "\033[0m"
+	// Check for quiet/cron mode
+	quietMode := len(os.Args) > 1 && os.Args[1] == "--quiet"
 	
-	fmt.Println("╔════════════════════════════════════════════════════════════╗")
-	fmt.Println("║              ⛽ GAS PRICE ALERT —", time.Now().Format("15:04"), "              ║")
-	fmt.Println("╚════════════════════════════════════════════════════════════╝")
-	fmt.Println()
+	if !quietMode {
+		fmt.Println("╔════════════════════════════════════════════════════════════╗")
+		fmt.Println("║              ⛽ GAS PRICE ALERT —", time.Now().Format("15:04"), "              ║")
+		fmt.Println("╚════════════════════════════════════════════════════════════╝")
+		fmt.Println()
+	}
 
 	gwei, err := getGasPrice()
 	if err != nil {
@@ -162,7 +165,25 @@ func main() {
 	}
 
 	status := getStatusText(gwei)
+
+	if quietMode {
+		// Quiet mode: just log and send Discord alerts
+		if err := logGasPrice(gwei, status); err != nil {
+			fmt.Printf("Warning: Failed to log: %v\n", err)
+		}
+		if err := sendDiscordAlert(gwei, status); err != nil {
+			fmt.Printf("Warning: Discord alert failed: %v\n", err)
+		}
+		// Only output if alert-worthy
+		if gwei > highThreshold || gwei < lowThreshold {
+			fmt.Printf("%.2f gwei (%s)\n", gwei, status)
+		}
+		return
+	}
+
+	// Interactive mode
 	color := getStatusColor(gwei)
+	reset := "\033[0m"
 
 	fmt.Printf("Current Gas Price: %s%.2f gwei%s\n", color, gwei, reset)
 	fmt.Printf("Status: %s%s%s\n", color, status, reset)
